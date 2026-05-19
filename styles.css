@@ -28,6 +28,35 @@ body {
     radial-gradient(circle at 8% 14%, rgba(255, 205, 189, 0.42), transparent 28%),
     radial-gradient(circle at 94% 22%, rgba(185, 221, 255, 0.46), transparent 26%),
     linear-gradient(180deg, #fff8ee 0%, #f8fcff 48%, #fff9f1 100%);
+  transition: background 700ms ease;
+}
+
+body.time-morning {
+  background:
+    radial-gradient(circle at 10% 12%, rgba(255, 235, 166, 0.42), transparent 28%),
+    radial-gradient(circle at 92% 18%, rgba(176, 224, 255, 0.5), transparent 26%),
+    linear-gradient(180deg, #fff8e6 0%, #f0fbff 48%, #fffaf0 100%);
+}
+
+body.time-afternoon {
+  background:
+    radial-gradient(circle at 8% 14%, rgba(255, 205, 189, 0.42), transparent 28%),
+    radial-gradient(circle at 94% 22%, rgba(185, 221, 255, 0.46), transparent 26%),
+    linear-gradient(180deg, #fff8ee 0%, #f8fcff 48%, #fff9f1 100%);
+}
+
+body.time-evening {
+  background:
+    radial-gradient(circle at 10% 16%, rgba(255, 176, 146, 0.42), transparent 30%),
+    radial-gradient(circle at 92% 18%, rgba(202, 177, 255, 0.34), transparent 28%),
+    linear-gradient(180deg, #fff1e7 0%, #f8efff 52%, #fff8ef 100%);
+}
+
+body.time-night {
+  background:
+    radial-gradient(circle at 12% 14%, rgba(255, 220, 157, 0.22), transparent 24%),
+    radial-gradient(circle at 88% 20%, rgba(121, 157, 255, 0.28), transparent 30%),
+    linear-gradient(180deg, #eaf1ff 0%, #f7f6ff 46%, #fff8f1 100%);
 }
 
 body.no-scroll {
@@ -173,10 +202,22 @@ h1 {
   line-height: 1.8;
 }
 
+.time-note {
+  display: block;
+  max-width: 520px;
+  margin: 2px 0 0;
+  padding: 0;
+  color: rgba(64, 56, 58, 0.48);
+  background: transparent;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.7;
+}
+
 .hero-actions {
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 30px;
+  margin-top: 22px;
 }
 
 .button {
@@ -706,6 +747,124 @@ h1 {
   margin-bottom: 0;
 }
 
+.story-list {
+  display: grid;
+  gap: 22px;
+  margin-top: 28px;
+}
+
+.story-entry {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.92fr) minmax(0, 1.08fr);
+  gap: 28px;
+  align-items: center;
+  padding: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.86);
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(255, 224, 190, 0.86), rgba(243, 247, 255, 0.82));
+  box-shadow: 0 18px 48px rgba(84, 64, 56, 0.12);
+}
+
+.story-entry-cover {
+  display: block;
+  overflow: hidden;
+  border: 4px solid rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  background: var(--white);
+}
+
+.story-entry-cover img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: 50% 44%;
+  transition: transform 220ms ease;
+}
+
+.story-entry:hover .story-entry-cover img {
+  transform: scale(1.03);
+}
+
+.story-entry-content {
+  padding: 8px 10px 8px 0;
+}
+
+.story-entry-content small {
+  display: inline-flex;
+  margin-bottom: 16px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  color: rgba(64, 56, 58, 0.62);
+  background: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.story-entry-content h3 {
+  margin-bottom: 14px;
+  font-size: clamp(30px, 4vw, 48px);
+  line-height: 1.1;
+}
+
+.story-entry-content p:not(.section-kicker) {
+  max-width: 620px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.chapter-hero {
+  width: min(980px, calc(100% - 36px));
+  margin: 0 auto;
+  padding: 74px 0 34px;
+}
+
+.chapter-hero h1 {
+  max-width: 820px;
+  margin-bottom: 18px;
+  font-size: clamp(44px, 7vw, 86px);
+}
+
+.chapter-hero p {
+  max-width: 720px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.chapter-reader {
+  display: grid;
+  gap: 28px;
+  width: min(1180px, calc(100% - 36px));
+  margin: 0 auto 54px;
+}
+
+.chapter-reader .reveal {
+  opacity: 1;
+  transform: none;
+}
+
+.manga-page {
+  margin: 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 18px 48px rgba(84, 64, 56, 0.12);
+}
+
+.manga-page img {
+  display: block;
+  width: 100%;
+  border-radius: 6px;
+}
+
+.manga-page figcaption {
+  padding: 10px 4px 2px;
+  color: rgba(64, 56, 58, 0.46);
+  font-weight: 900;
+}
+
 @media (max-width: 860px) {
   .site-header {
     align-items: flex-start;
@@ -725,6 +884,7 @@ h1 {
   .hero,
   .intro,
   .work-grid,
+  .story-entry,
   .service-list,
   .steps,
   .contact {
@@ -747,6 +907,10 @@ h1 {
   .contact {
     display: grid;
     padding: 28px;
+  }
+
+  .story-entry-content {
+    padding: 0;
   }
 }
 
@@ -781,6 +945,11 @@ h1 {
 
   .work-card {
     min-height: 400px;
+  }
+
+  .chapter-hero,
+  .chapter-reader {
+    width: min(100% - 24px, 1180px);
   }
 
   .lightbox {
