@@ -88,7 +88,7 @@ if (lightbox) {
 }
 
 document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && lightbox.classList.contains("is-open")) {
+  if (event.key === "Escape" && lightbox && lightbox.classList.contains("is-open")) {
     closeLightbox();
   }
 });
