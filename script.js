@@ -6,8 +6,15 @@ const lightboxLinks = document.querySelectorAll(".lightbox-link");
 const revealItems = document.querySelectorAll(".reveal");
 const textRevealItems = document.querySelectorAll(".text-reveal");
 const timeNote = document.querySelector("#timeNote");
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let lastFocusedElement = null;
+let lightboxClearTimer = null;
 
 const setTimeMood = () => {
+  if (!timeNote) {
+    return;
+  }
+
   const hour = new Date().getHours();
   const moods = [
     {
@@ -34,27 +41,36 @@ const setTimeMood = () => {
   const mood = moods.find((item) => item.active) || moods[1];
 
   document.body.classList.add(`time-${mood.name}`);
-  if (timeNote) {
-    timeNote.textContent = mood.text;
-  }
+  timeNote.textContent = mood.text;
 };
 
 setTimeMood();
 
 const openLightbox = (link) => {
-  if (!lightbox || !lightboxImage || !lightboxTitle) {
+  if (!lightbox || !lightboxImage || !lightboxTitle || !lightboxClose) {
     return;
   }
 
   const image = link.getAttribute("href");
   const title = link.dataset.title || "创作图片";
 
+  window.clearTimeout(lightboxClearTimer);
+  lastFocusedElement = document.activeElement;
   lightboxImage.src = image;
   lightboxImage.alt = title;
   lightboxTitle.textContent = title;
-  lightbox.classList.add("is-open");
+  lightbox.classList.add("is-open", "is-loading");
   lightbox.setAttribute("aria-hidden", "false");
   document.body.classList.add("no-scroll");
+  lightboxClose.focus({ preventScroll: true });
+
+  const showImage = () => lightbox.classList.remove("is-loading");
+  if (lightboxImage.complete) {
+    showImage();
+  } else {
+    lightboxImage.addEventListener("load", showImage, { once: true });
+    lightboxImage.addEventListener("error", showImage, { once: true });
+  }
 };
 
 const closeLightbox = () => {
@@ -62,10 +78,19 @@ const closeLightbox = () => {
     return;
   }
 
-  lightbox.classList.remove("is-open");
+  lightbox.classList.remove("is-open", "is-loading");
   lightbox.setAttribute("aria-hidden", "true");
   document.body.classList.remove("no-scroll");
-  lightboxImage.src = "";
+
+  if (lastFocusedElement instanceof HTMLElement) {
+    lastFocusedElement.focus({ preventScroll: true });
+  }
+
+  lightboxClearTimer = window.setTimeout(() => {
+    if (!lightbox.classList.contains("is-open")) {
+      lightboxImage.src = "";
+    }
+  }, 220);
 };
 
 lightboxLinks.forEach((link) => {
@@ -91,11 +116,18 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && lightbox && lightbox.classList.contains("is-open")) {
     closeLightbox();
   }
+
+  if (event.key === "Tab" && lightbox && lightbox.classList.contains("is-open") && lightboxClose) {
+    event.preventDefault();
+    lightboxClose.focus({ preventScroll: true });
+  }
 });
 
 const revealTargets = [...revealItems, ...textRevealItems];
 
-if ("IntersectionObserver" in window) {
+if (prefersReducedMotion) {
+  revealTargets.forEach((item) => item.classList.add("is-visible"));
+} else if ("IntersectionObserver" in window) {
   const revealObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -105,7 +137,7 @@ if ("IntersectionObserver" in window) {
         }
       });
     },
-    { threshold: 0.16 }
+    { threshold: 0.08, rootMargin: "0px 0px 8% 0px" }
   );
 
   revealTargets.forEach((item) => revealObserver.observe(item));
